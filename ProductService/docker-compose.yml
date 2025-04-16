@@ -1,0 +1,49 @@
+services:
+  postgres:
+    image: postgres:17
+    container_name: product_postgres
+    environment:
+      POSTGRES_DB: productdb
+      POSTGRES_USER: techpro
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data  
+      - ./src/main/resources/init-scripts:/docker-entrypoint-initdb.d
+    networks:
+      - backend
+
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: product_pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@techpro.com
+      PGADMIN_DEFAULT_PASSWORD: admin123
+    ports:
+      - "5050:80"
+    depends_on:
+      - postgres
+    networks:
+      - backend
+
+  product_service:
+    build:
+      context: .
+    container_name: product_service
+    ports:
+      - "8081:8081"
+    depends_on:
+      - postgres
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/productdb
+      SPRING_DATASOURCE_USERNAME: techpro
+      SPRING_DATASOURCE_PASSWORD: password
+    networks:
+      - backend
+
+networks:
+  backend:
+
+volumes:
+  pgdata:  
