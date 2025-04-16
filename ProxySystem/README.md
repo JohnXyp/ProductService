@@ -1,22 +1,22 @@
-# ProxySystem Servlet Application
 
-This is a simple Java Servlet project named **ProxySystem** developed as part of a Java backend assessment. The servlet:
+# 🔁 ProxySystem - Java Servlet Redirector
 
-    - Listens on the `/proxy-system` endpoint
-    - Responds with the message `"System reached"`
-    - Redirects the client to the Swagger UI of a Dockerized Spring Boot application (expected to run at `http://localhost:8081/swagger-ui/index.html`)
+This is a simple Java Servlet project named **ProxySystem** designed to simulate an entry point to a system. It listens on `/proxy-system`, displays a "System reached" message, and automatically redirects the user to a target Swagger UI (hosted on a Spring Boot app running at port `8081`).
 
-## 📦 Technologies Used
+## 🚀 Features
 
-    - Java 21
-    - Maven
-    - Java Servlet API (javax.servlet)
-    - Apache Tomcat 9+
-    - HTML + Meta Redirect
+- ✅ Java Servlet mapped to `/proxy-system`
+- ✅ Responds with a styled HTML message: _"System reached"_
+- ✅ Automatically redirects (after 2 seconds) to `http://localhost:8081/swagger-ui/index.html`
+- ✅ Deployed in a local **Tomcat** instance (no Docker)
+
+---
 
 ## 📁 Project Structure
 
+```
 ProxySystem/
+│
 ├── src/
 │   └── main/
 │       └── java/
@@ -24,39 +24,94 @@ ProxySystem/
 │               └── techpro/
 │                   └── proxy/
 │                       └── ProxySystem.java
+├── webapp/
+│   └── WEB-INF/
+│       └── web.xml
 ├── pom.xml
-└── README.md
+```
 
-## ⚙️ How to Build
+---
 
-Make sure you have **JDK 21+** and **Maven** installed.
+## ⚙️ How It Works
 
-In the project root (`ProxySystem/`), run:
+When you access:
+
+```
+http://localhost:8080/proxysystem/proxy-system
+```
+
+You’ll see:
+
+> ✅ "System reached" message  
+> 🔜 Auto-redirect to: `http://localhost:8081/swagger-ui/index.html`
+
+---
+
+## 🛠️ Setup & Deployment
+
+### 1. Prerequisites
+
+- Java 21+
+- Apache Tomcat 9+
+- Maven
+
+### 2. Build the project
 
 ```bash
 mvn clean package
+```
 
-This will generate a WAR file located at: target/proxysystem.war
+### 3. Deploy to Tomcat
 
-🚀 How to Deploy
-	1.	Install Apache Tomcat 9+.
-	2.	Copy the generated WAR file into Tomcat’s webapps/ directory: cp target/proxysystem.war /path/to/tomcat/webapps/
-    3.	Start Tomcat
+- Copy the generated `.war` file from `target/` to `TOMCAT_HOME/webapps`
+- Restart Tomcat
 
-🌐 How to Test
+> 📦 Make sure the `.war` is named like `proxysystem.war` so it's accessible via `/proxysystem/...`
 
-    Visit the servlet in your browser: http://localhost:8080/proxysystem/proxy-system
-    You should see:
-	•	A message: "System reached"
-	•	After 2 seconds, your browser will automatically redirect to the Swagger UI of your Spring Boot application:
-        http://localhost:8081/swagger-ui/index.html
+---
 
-    ⚠️ Note: Make sure your Spring Boot application is running in Docker on port 8081 with Swagger UI enabled.
+## 🔗 Redirect Target
 
-	🔐 Notes
-	•	The servlet uses the @WebServlet("/proxy-system") annotation for configuration.
-	•	Response is written in HTML with a <meta> tag to perform a client-side redirect.
+This servlet redirects to the Swagger UI of the companion app **ProductService**:
 
-📄 License
+```
+http://localhost:8081/swagger-ui/index.html
+```
 
-This project is intended for educational and assessment purposes only.
+Ensure that the **ProductService** Docker container is running on port 8081.
+
+---
+
+## 🧪 Example Response
+
+```html
+<h2>System reached</h2>
+<p>You will be redirected to the Swagger UI shortly...</p>
+```
+
+Auto-redirect with:
+
+```html
+<meta http-equiv='refresh' content='2;URL=http://localhost:8081/swagger-ui/index.html'/>
+```
+
+---
+
+## 🧰 Technologies Used
+
+- Java Servlet API
+- Apache Tomcat
+- Maven
+
+---
+
+## 👤 Author
+
+**Ioannis Xypteras**  
+GitHub: [@JohnXyp](https://github.com/JohnXyp)
+
+---
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
